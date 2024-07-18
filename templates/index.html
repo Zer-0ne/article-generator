@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation System</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #1a1a1a;
+            color: #00ffcc;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #111;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #00ffcc;
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        textarea {
+            background-color: #333;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            padding: 1rem;
+            font-size: 1rem;
+            width: 300px;
+            height: 100px;
+            resize: none;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: #00ffcc;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        #embed-results, #classify-results {
+            margin-top: 1rem;
+        }
+
+        footer {
+            background-color: #111;
+            color: #00ffcc;
+            padding: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Recommendation System</h1>
+    </header>
+    <div class="container">
+        <form id="embed-form">
+            <textarea id="embed-text" name="text" placeholder="Enter text to embed"></textarea>
+            <button type="submit">Get Similar Articles</button>
+        </form>
+        <div id="embed-results"></div>
+
+        <form id="classify-form">
+            <textarea id="classify-text" name="text" placeholder="Enter text to classify"></textarea>
+            <button type="submit">Classify Text</button>
+        </form>
+        <div id="classify-results"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Recommendation System</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            $('#embed-form').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/embed',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        let results = '<h2>Similar Articles</h2>';
+                        response.forEach(function(article) {
+                            results += `<p>[${article.id}] ${article.text} (${article.category})</p>`;
+                        });
+                        $('#embed-results').html(results);
+                    }
+                });
+            });
+
+            $('#classify-form').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/classify',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#classify-results').html(`<h2>Classification Result: ${response.prediction}</h2>`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
