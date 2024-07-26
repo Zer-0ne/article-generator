@@ -87,5 +87,5 @@ def extract_tags_endpoint():
     tags = extract_tags(text)
     return jsonify(tags=tags.strip())
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+    # app.run(debug=True)
