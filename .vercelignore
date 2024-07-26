@@ -1,0 +1,16 @@
+# Ignore Python virtual environment
+.venv/
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore any other files or directories that are not needed for the deployment
+node_modules/
+test/
+docs/
+.git/
+.venv/
+*.pyc
+__pycache__/
+node_modules/
